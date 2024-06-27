@@ -312,6 +312,9 @@
     }
     .topic-header-extra {
       grid-area: extra;
+      .archetype-private_message & {
+        grid-area: categories;
+      }
     }
   }
   .topic-link {
@@ -358,6 +361,12 @@
       .discourse-tag {
         display: inline; // tags need to stay inline in order for them to truncate
         vertical-align: unset;
+      }
+    }
+    .topic-featured-link {
+      align-self: baseline;
+      .d-icon {
+        font-size: var(--font-down-2);
       }
     }
   }
