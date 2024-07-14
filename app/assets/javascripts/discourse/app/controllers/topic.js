@@ -340,11 +340,11 @@ export default Controller.extend(bufferedProperty("model"), {
 
   @action
   jumpTop(event) {
-    if (wantsNewWindow(event)) {
+    if (event && wantsNewWindow(event)) {
       return;
     }
 
-    event.preventDefault();
+    event?.preventDefault();
     DiscourseURL.routeTo(this.get("model.firstPostUrl"), {
       skipIfOnScreen: false,
       keepFilter: true,
@@ -566,14 +566,6 @@ export default Controller.extend(bufferedProperty("model"), {
           DiscourseURL.routeTo(this.model.urlForPostNumber(nearestPost));
           this.updateQueryParams();
         });
-    },
-
-    collapseSummary() {
-      this.get("model.postStream").collapseSummary();
-    },
-
-    showSummary() {
-      this.get("model.postStream").showSummary(this.currentUser);
     },
 
     removeAllowedUser(user) {
@@ -1649,9 +1641,6 @@ export default Controller.extend(bufferedProperty("model"), {
       this.onMessage,
       this.get("model.message_bus_last_id")
     );
-
-    const summariesChannel = `/summaries/topic/${this.get("model.id")}`;
-    this.messageBus.subscribe(summariesChannel, this._updateSummary);
   },
 
   unsubscribe() {
@@ -1661,13 +1650,6 @@ export default Controller.extend(bufferedProperty("model"), {
     }
 
     this.messageBus.unsubscribe("/topic/*", this.onMessage);
-    this.messageBus.unsubscribe("/summaries/topic/*", this._updateSummary);
-  },
-
-  @bind
-  _updateSummary(update) {
-    const postStream = this.get("model.postStream");
-    postStream.processSummaryUpdate(update);
   },
 
   @bind

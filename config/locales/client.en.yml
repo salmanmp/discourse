@@ -17,6 +17,7 @@ en:
             kb: KB
             mb: MB
             tb: TB
+      percent: "%{count}%"
       short:
         thousands: "%{number}k"
         millions: "%{number}M"
@@ -1141,6 +1142,7 @@ en:
       none: "(select an option)"
       required: 'Please enter a value for "%{name}"'
       same_as_password: "Your password should not be repeated in other fields."
+      optional: (optional)
 
     user:
       said: "%{username}:"
@@ -2232,10 +2234,11 @@ en:
       header_title: "Welcome!"
       subheader_title: "Let's create your account"
       disclaimer: "By registering, you agree to the <a href='%{privacy_link}' target='blank'>privacy policy</a> and <a href='%{tos_link}' target='blank'>terms of service</a>."
-      title: "Create your account"
+      title: "Sign Up"
       failed: "Something went wrong, perhaps this email is already registered, try the forgot password link"
       associate: "Already have an account? <a href='%{associate_link}'>Log In</a> to link your %{provider} account."
       activation_title: "Activate your account"
+      already_have_account: "Already have an account?"
 
     forgot_password:
       title: "Password Reset"
@@ -4138,36 +4141,33 @@ en:
     pending_posts:
       label: "Pending"
       label_with_count: "Pending (%{count})"
+    sr_topic_list_caption: Topic list, column headers with buttons are sortable.
 
     # This string uses the ICU Message Format. See https://meta.discourse.org/t/7035 for translation guidelines.
     posts_likes_MF: |
-      This topic has { count, plural,
-          one {# reply}
-        other {# replies}
-      } { ratio, select,
-          low {with a high like to post ratio}
-          med {with a very high like to post ratio}
-         high {with an extremely high like to post ratio}
+      { count, plural,
+          one {# reply,}
+        other {# replies,}
+      }{ ratio, select,
+          low { high like to post ratio,}
+          med { very high like to post ratio,}
+         high { extremely high like to post ratio,}
         other {}
-      }
+      } jump to the first or last post…
 
+    posters: "Posters"
     latest_poster_link: "%{username}'s profile, latest poster"
     original_post: "Original Post"
     views: "Views"
-    sr_views: "Sort by views"
     views_lowercase:
       one: "view"
       other: "views"
     replies: "Replies"
-    sr_replies: "Sort by replies"
     views_long:
       one: "this topic has been viewed %{count} time"
       other: "this topic has been viewed %{count} times"
     activity: "Activity"
-    sr_activity: "Sort by activity"
     likes: "Likes"
-    sr_likes: "Sort by likes"
-    sr_op_likes: "Sort by original post likes"
     likes_lowercase:
       one: "like"
       other: "likes"
@@ -4642,8 +4642,10 @@ en:
     no_group_messages_title: "No group messages found"
 
     topic_entrance:
-      sr_jump_top_button: "Jump to the first post"
-      sr_jump_bottom_button: "Jump to the last post"
+      sr_jump_top_button: "Jump to the first post - %{date}"
+      sr_jump_bottom_button: "Jump to the last post - %{date}"
+      jump_top_button_title: "Jump to the first post"
+      jump_bottom_button_title: "Jump to the last post"
     fullscreen_table:
       expand_btn: "Expand Table"
       view_table: "View Table"
@@ -4803,6 +4805,9 @@ en:
       panels:
         forum:
           label: Forum
+      back_to_forum: "Back to Forum"
+      collapse_all_sections: "Collapse all sections"
+      expand_all_sections: "Expand all sections"
       filter: "Filter..."
       clear_filter: "Clear filter"
       no_results:
@@ -4923,10 +4928,7 @@ en:
     admin:
       title: "Discourse Admin"
       moderator: "Moderator"
-      back_to_forum: "Back to Forum"
       filter_reports: Filter reports
-      expand_all_sections: "Expand all sections"
-      collapse_all_sections: "Collapse all sections"
 
       tags:
         remove_muted_tags_from_latest:
@@ -5048,7 +5050,6 @@ en:
           title: "More options"
           move_up: "Move up"
           move_down: "Move down"
-
       groups:
         new:
           title: "New Group"
@@ -5346,6 +5347,7 @@ en:
         events:
           none: "There are no related events."
           redeliver: "Redeliver"
+          redeliver_failed: "Redeliver Failed"
           incoming:
             one: "There is a new event."
             other: "There are %{count} new events."
@@ -5355,6 +5357,10 @@ en:
           request: "Request"
           response: "Response"
           redeliver_confirm: "Are you sure you want to redeliver the same payload?"
+          redeliver_failed_confirm:
+            one: "Are you sure you want to redeliver %{count} webhook event?"
+            other: "Are you sure you want to redeliver %{count} webhook events?"
+          no_events_to_redeliver: "No events to redeliver."
           headers: "Headers"
           payload: "Payload"
           body: "Body"
@@ -5480,6 +5486,36 @@ en:
             contact_information_saved: "Contact information saved"
             your_organization_saved: "Your organization saved"
           saved: "saved!"
+        flags:
+          header: "Moderation Flags"
+          subheader: "The flagging system in Discourse helps you and your moderator team manage content and user behavior, keeping your community respectful and healthy. The defaults are suitable for most communities and you don’t have to change them. However, if your site has particular requirements you can disable flags you don’t need and add your own custom flags."
+          description: "Description"
+          enabled: "Enabled?"
+          add: "Add Flag"
+          edit: "Edit"
+          back: "Back to flags"
+          delete: "Delete"
+          delete_confirm: 'Are you sure you want to delete "%{name}"?'
+          form:
+            add_header: "Add flag"
+            edit_header: "Edit flag"
+            save: "Save"
+            name: "Name"
+            description: "Description"
+            applies_to: "Display this flag on"
+            topic: "topics"
+            post: "posts"
+            chat_message: "chat messages"
+            enabled: "Enable this custom flag after saving"
+            alert: "Once a custom flag has been used, it can only be disabled but not edited or deleted."
+            edit_flag: "Edit flag"
+            non_editable: "You cannot edit this flag because it is a system flag or has already been used in the review system, however you can still disable it."
+            delete_flag: "Delete flag"
+            non_deletable: "You cannot delete this flag because it is a system flag or has already been used in the review system, however you can still disable it."
+          more_options:
+            title: "More options"
+            move_up: "Move up"
+            move_down: "Move down"
       plugins:
         title: "Plugins"
         installed: "Installed Plugins"
@@ -6157,6 +6193,9 @@ en:
             delete_watched_word_group: "delete watched word group"
             toggle_flag: "toggle flag"
             move_flag: "move flag"
+            create_flag: "create flag"
+            update_flag: "update flag"
+            delete_flag: "delete flag"
         screened_emails:
           title: "Screened Emails"
           description: "When someone tries to create a new account, the following email addresses will be checked and the registration will be blocked, or some other action performed."
