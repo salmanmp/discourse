@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# experimental_redesigned_about_page_groups
 class AboutController < ApplicationController
   requires_login only: [:live_post_counts]
 

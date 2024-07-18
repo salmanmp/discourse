@@ -1,3 +1,10 @@
+.about {
+  &__main-content {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+}
+
 section.about {
   margin-bottom: 3em;
 

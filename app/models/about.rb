@@ -54,6 +54,14 @@ class About
     SiteSetting.site_description
   end
 
+  def extended_site_description
+    SiteSetting.extended_site_description_cooked
+  end
+
+  def banner_image
+    SiteSetting.about_banner_image&.url
+  end
+
   def moderators
     @moderators ||= User.where(moderator: true, admin: false).human_users.order("last_seen_at DESC")
   end
