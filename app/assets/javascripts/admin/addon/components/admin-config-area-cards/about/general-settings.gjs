@@ -11,6 +11,8 @@ import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import i18n from "discourse-common/helpers/i18n";
 import I18n from "discourse-i18n";
+import Form from "discourse/components/form";
+import { cached } from "@glimmer/tracking";
 
 export default class AdminConfigAreasAboutGeneralSettings extends Component {
   @service toasts;
@@ -20,18 +22,30 @@ export default class AdminConfigAreasAboutGeneralSettings extends Component {
   extendedDescription = this.args.generalSettings.extendedSiteDescription.value;
   aboutBannerImage = this.args.generalSettings.aboutBannerImage.value;
 
+  @cached
+  get data() {
+    return {
+      name: this.args.generalSettings.title.value,
+      summary: this.args.generalSettings.siteDescription.value,
+      extendedDescription:
+        this.args.generalSettings.extendedSiteDescription.value,
+      aboutBannerImage: this.args.generalSettings.aboutBannerImage.value,
+    };
+  }
+
   @action
-  async save() {
+  async save(data) {
     try {
       this.args.setGlobalSavingStatus(true);
+      console.log(data);
       await ajax("/admin/config/about.json", {
         type: "PUT",
         data: {
           general_settings: {
-            name: this.name,
-            summary: this.summary,
-            extended_description: this.extendedDescription,
-            about_banner_image: this.aboutBannerImage,
+            name: data.name,
+            summary: data.summary,
+            extended_description: data.extendedDescription,
+            about_banner_image: data.aboutBannerImage,
           },
         },
       });
@@ -50,52 +64,50 @@ export default class AdminConfigAreasAboutGeneralSettings extends Component {
     }
   }
 
+  @action
+  setImage(upload, { set }) {
+    set("aboutBannerImage", upload.url);
+  }
+
   <template>
-    <div class="control-group community-name-input">
-      <label>{{i18n "admin.config_areas.about.community_name"}}</label>
-      <input
-        {{on "input" (withEventValue (fn (mut this.name)))}}
-        type="text"
-        value={{this.name}}
-      />
-    </div>
-    <div class="control-group community-summary-input">
-      <label>{{i18n "admin.config_areas.about.community_summary"}}</label>
-      <input
-        {{on "input" (withEventValue (fn (mut this.summary)))}}
-        type="text"
-        value={{this.summary}}
-      />
-    </div>
-    <div class="control-group community-description-input">
-      <label>
-        <span>{{i18n "admin.config_areas.about.community_description"}}</span>
-        <span class="admin-config-area-card__label-optional">{{i18n
-            "admin.config_areas.about.optional"
-          }}</span>
-      </label>
-      <DEditor @value={{this.extendedDescription}} />
-    </div>
-    <div class="control-group banner-image-uploader">
-      <label>
-        <span>{{i18n "admin.config_areas.about.banner_image"}}</span>
-        <span class="admin-config-area-card__label-optional">{{i18n
-            "admin.config_areas.about.optional"
-          }}</span>
-      </label>
-      <p class="admin-config-area-card__additional-help">
-        {{i18n "admin.config_areas.about.banner_image_help"}}
-      </p>
-      <UppyImageUploader
-        @type="site_setting"
-        @imageUrl={{this.aboutBannerImage}}
-      />
-    </div>
-    <DButton
-      @label="admin.config_areas.about.update"
-      @action={{this.save}}
-      @disabled={{@globalSavingStatus}}
-      class="btn-primary admin-config-area-card__btn-save"
-    />
+    <Form @data={{this.data}} @onSubmit={{this.save}} as |form|>
+      <form.Field
+        @name="name"
+        @title={{i18n "admin.config_areas.about.community_name"}}
+        @validation="required"
+        as |field|
+      >
+        <field.Input />
+      </form.Field>
+
+      <form.Field
+        @name="summary"
+        @title={{i18n "admin.config_areas.about.community_summary"}}
+        @format="large"
+        as |field|
+      >
+        <field.Input />
+      </form.Field>
+
+      <form.Field
+        @name="extendedDescription"
+        @title={{i18n "admin.config_areas.about.community_description"}}
+        as |field|
+      >
+        <field.Composer />
+      </form.Field>
+
+      <form.Field
+        @name="aboutBannerImage"
+        @title={{i18n "admin.config_areas.about.banner_image"}}
+        @subtitle={{i18n "admin.config_areas.about.banner_image_help"}}
+        @onSet={{this.setImage}}
+        as |field|
+      >
+        <field.Image />
+      </form.Field>
+
+      <form.Submit />
+    </Form>
   </template>
 }

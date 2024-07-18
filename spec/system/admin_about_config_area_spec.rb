@@ -71,17 +71,18 @@ describe "Admin About Config Area Page", type: :system do
       config_area.visit
 
       image_file = file_from_fixtures("logo.png", "images")
-      config_area.general_settings_section.community_name_input.fill_in(with: "my community name")
+      config_area.general_settings_section.community_name_input.fill_in("my community name")
       config_area.general_settings_section.community_summary_input.fill_in(
-        with: "here's a bit of a summary",
+        "here's a bit of a summary",
       )
       config_area.general_settings_section.community_description_editor.fill_in(
-        with: "here's an extended description for the **community**",
+        "here's an extended description for the **community**",
       )
       config_area.general_settings_section.banner_image_uploader.select_image(image_file.path)
       expect(config_area.general_settings_section.banner_image_uploader).to have_uploaded_image
 
-      config_area.general_settings_section.save_button.click
+      config_area.general_settings_section.submit
+
       expect(config_area.general_settings_section).to have_saved_successfully
 
       expect(SiteSetting.title).to eq("my community name")
