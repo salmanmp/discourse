@@ -101,7 +101,6 @@ describe "Homepage", type: :system do
       end
 
       find("#site-logo").click
-
       expect(page).to have_css(".navigation-container .top.active", text: "Top")
       expect(page).to have_css(".top-lists")
 
@@ -113,7 +112,7 @@ describe "Homepage", type: :system do
       homepage_picker.select_row_by_name("(default)")
       page.find(".btn-primary.save-changes").click
 
-      # Wait for the save to complete
+      # Make sure save is complete
       find(".btn-primary.save-changes:not([disabled])", wait: 5)
       try_until_success do
         visit "/u/#{user.username}/preferences/interface"
